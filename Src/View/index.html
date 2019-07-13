@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="UTF-8" />
+  <title>FFT WaterMarker</title>
+  <script src="./vue.js"></script>
+  <script src="./jquery.min.js"></script>
+  <link rel="stylesheet" href="./css/main.css" type="text/css" />
+  <link type="text/css" href="./css/fire.css" rel="stylesheet" />
+
+</head>
+
+<body>
+  <div id="app">
+    <div id="nav">
+      <div id="buttonArea">
+        <button v-on:click="minimize">
+          <svg class="icon" width="20px" height="20px" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill="#333333"
+              d="M696 480H328c-4.4 0-8 3.6-8 8v48c0 4.4 3.6 8 8 8h368c4.4 0 8-3.6 8-8v-48c0-4.4-3.6-8-8-8z" />
+            <path fill="#333333"
+              d="M512 64C264.6 64 64 264.6 64 512s200.6 448 448 448 448-200.6 448-448S759.4 64 512 64z m0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" />
+          </svg>
+        </button>
+        <button v-on:click="close">
+          <svg class="icon" width="20px" height="20px" viewBox="0 0 1024 1024" version="1.1"
+            xmlns="http://www.w3.org/2000/svg">
+            <path fill="#333333"
+              d="M685.4 354.8c0-4.4-3.6-8-8-8l-66 0.3L512 465.6l-99.3-118.4-66.1-0.3c-4.4 0-8 3.5-8 8 0 1.9 0.7 3.7 1.9 5.2l130.1 155L340.5 670c-1.2 1.5-1.9 3.3-1.9 5.2 0 4.4 3.6 8 8 8l66.1-0.3L512 564.4l99.3 118.4 66 0.3c4.4 0 8-3.5 8-8 0-1.9-0.7-3.7-1.9-5.2L553.5 515l130.1-155c1.2-1.4 1.8-3.3 1.8-5.2z" />
+            <path fill="#333333"
+              d="M512 65C264.6 65 64 265.6 64 513s200.6 448 448 448 448-200.6 448-448S759.4 65 512 65z m0 820c-205.4 0-372-166.6-372-372s166.6-372 372-372 372 166.6 372 372-166.6 372-372 372z" />
+          </svg>
+        </button>
+      </div>
+    </div>
+    <div class="body">
+      <div class="content">
+        <p class="hover-underline-animation">Fourier Watermarker</p>
+
+        <section>
+          <input id="source" v-model="sourcePath" placeholder="选择要处理的图片">
+          <button class="mouse-cursor-gradient-tracking" id="openSource" v-on:click="selectFile">
+            <span>Open</span>
+          </button>
+        </section>
+        <section>
+          <input id="target" v-model="targetPath" placeholder="输出路径">
+          <button class="mouse-cursor-gradient-tracking" id="openTarget" v-on:click="openPath">
+            <span>Open</span>
+          </button>
+        </section>
+
+        <section>
+          <p class="small-hover-underline-animation">水印文字</p>
+          <input type="text" v-model="mark" />
+          <div class="choosetype">
+            <!-- <span class="pay_list_c1 on">
+              <input class="radioclass" type="radio" v-model="type" value="1" />加水印
+            </span>
+            <span class="pay_list_c1 on">
+              <input class="radioclass" type="radio" v-model="type" value="2" />查看水印
+            </span> -->
+            <input class="radioclass" type="radio" v-model="type" value="1" />加水印
+
+            <input class="radioclass" type="radio" v-model="type" value="2" />查看水印
+
+          </div>
+          
+
+          <button class="mouse-cursor-gradient-tracking" id="start" v-on:click="start">
+            <span>Start</span>
+          </button>
+        </section>
+
+      </div>
+      <div id="fire" class="stage">
+        <div class="campfire">
+          <div class="sparks">
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+            <div class="spark"></div>
+          </div>
+          <div class="logs">
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+            <div class="log">
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+              <div class="streak"></div>
+            </div>
+          </div>
+          <div class="sticks">
+            <div class="stick"></div>
+            <div class="stick"></div>
+            <div class="stick"></div>
+            <div class="stick"></div>
+          </div>
+          <div class="fire">
+            <div class="fire__red">
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+            </div>
+            <div class="fire__orange">
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+            </div>
+            <div class="fire__yellow">
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+            </div>
+            <div class="fire__white">
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+              <div class="flame"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script src="./main.js"></script>
+</body>
+
+</html>

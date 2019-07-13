@@ -1,0 +1,12 @@
+directories:
+  output: build
+  buildResources: build
+productName: watermark
+appId: com.windandlignt.watermark
+mac:
+  icon: build/icons/icon.icns
+win:
+  icon: build/icons/icon.ico
+linux:
+  icon: build/icons
+electronVersion: 5.0.6

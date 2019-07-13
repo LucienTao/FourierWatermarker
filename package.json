@@ -1,0 +1,39 @@
+{
+  "name": "watermarker",
+  "version": "1.0.0",
+  "main": "main.js",
+  "scripts": {
+    "build": "tsc main.ts",
+    "start": "yarn build && electron main.js",
+    "pack": "yarn build && electron-builder --dir",
+    "dist": "yarn build && electron-builder"
+  },
+  "author": "Lucien",
+  "license": "MIT",
+  "build": {
+    "productName": "watermark",
+    "appId": "com.windandlignt.watermark",
+    "directories": {
+      "output": "build"
+    },
+    "mac": {
+      "icon": "build/icons/icon.icns"
+    },
+    "win": {
+      "icon": "build/icons/icon.ico"
+    },
+    "linux": {
+      "icon": "build/icons"
+    }
+  },
+  "devDependencies": {
+    "@types/bluebird": "^3.5.27",
+    "electron": "^5.0.6",
+    "electron-builder": "^20.44.4",
+    "typescript": "^3.5.3"
+  },
+  "dependencies": {
+    "bluebird": "^3.5.5",
+    "lodash": "^4.17.14"
+  }
+}
